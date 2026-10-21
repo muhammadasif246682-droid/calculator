@@ -1,0 +1,247 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Calculator</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #141e30, #6a3093, #a044ff);
+            padding: 20px;
+        }
+
+        .calculator {
+            width: 100%;
+            max-width: 380px;
+            padding: 30px;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.13);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+            margin-top: 0;
+            font-size: 30px;
+        }
+
+        .subtitle {
+            color: #eadbff;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            color: white;
+            margin: 15px 0 7px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid transparent;
+            border-radius: 12px;
+            outline: none;
+            background: #f7f2ff;
+            color: #301052;
+            font-size: 17px;
+            transition: 0.3s;
+        }
+
+        input:focus {
+            border-color: #ff7eb3;
+            box-shadow: 0 0 10px #ff7eb366;
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 22px;
+        }
+
+        button {
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 22px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, filter 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            filter: brightness(1.1);
+        }
+
+        button:active {
+            transform: scale(0.97);
+        }
+
+        .add {
+            background: linear-gradient(135deg, #00c9a7, #00a878);
+        }
+
+        .subtract {
+            background: linear-gradient(135deg, #ff758c, #ff416c);
+        }
+
+        .multiply {
+            background: linear-gradient(135deg, #4776e6, #304ffe);
+        }
+
+        .divide {
+            background: linear-gradient(135deg, #ffb347, #ff8008);
+        }
+
+        .clear {
+            width: 100%;
+            margin-top: 12px;
+            background: #302044;
+            font-size: 16px;
+        }
+
+        .result-box {
+            margin-top: 25px;
+            padding: 18px;
+            border-radius: 15px;
+            background: #f7f2ff;
+            text-align: center;
+            overflow-wrap: anywhere;
+        }
+
+        .result-box h2 {
+            margin: 0 0 8px;
+            color: #6a3093;
+            font-size: 18px;
+        }
+
+        #result {
+            color: #24103d;
+            font-size: 27px;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        footer {
+            color: #eadbff;
+            text-align: center;
+            font-size: 12px;
+            margin-top: 22px;
+        }
+
+        @media (max-width: 400px) {
+            .calculator {
+                padding: 22px;
+            }
+
+            h1 {
+                font-size: 26px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="calculator">
+        <h1>✨ Calculator</h1>
+        <p class="subtitle">Calculate something amazing!</p>
+
+        <label for="num1">First Number</label>
+        <input type="number" id="num1"
+               placeholder="Enter first number" step="any">
+
+        <label for="num2">Second Number</label>
+        <input type="number" id="num2"
+               placeholder="Enter second number" step="any">
+
+        <div class="buttons">
+            <button class="add" onclick="calculate('+')">+</button>
+            <button class="subtract" onclick="calculate('-')">−</button>
+            <button class="multiply" onclick="calculate('*')">×</button>
+            <button class="divide" onclick="calculate('/')">÷</button>
+        </div>
+
+        <div class="result-box" aria-live="polite">
+            <h2>Your Result</h2>
+            <p id="result">0</p>
+        </div>
+
+        <button class="clear" onclick="clearCalculator()">
+            Clear All
+        </button>
+
+        <footer>Modern Calculator • Made with HTML, CSS & JavaScript</footer>
+    </div>
+
+    <script>
+        function calculate(operator) {
+            const input1 = document.getElementById("num1").value;
+            const input2 = document.getElementById("num2").value;
+            const result = document.getElementById("result");
+
+            if (input1.trim() === "" || input2.trim() === "") {
+                result.textContent = "Enter both numbers!";
+                return;
+            }
+
+            const a = Number(input1);
+            const b = Number(input2);
+            let answer;
+
+            switch (operator) {
+                case "+":
+                    answer = a + b;
+                    break;
+
+                case "-":
+                    answer = a - b;
+                    break;
+
+                case "*":
+                    answer = a * b;
+                    break;
+
+                case "/":
+                    if (b === 0) {
+                        result.textContent = "Cannot divide by zero!";
+                        return;
+                    }
+                    answer = a / b;
+                    break;
+            }
+
+            result.textContent = Number.isFinite(answer)
+                ? String(Number(answer.toPrecision(12)))
+                : "Result is too large!";
+        }
+
+        function clearCalculator() {
+            document.getElementById("num1").value = "";
+            document.getElementById("num2").value = "";
+            document.getElementById("result").textContent = "0";
+        }
+    </script>
+
+</body>
+</html>
